@@ -7,7 +7,7 @@ async function loadItems() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/items"
+            "/api/items"
         );
 
         allItems = await response.json();

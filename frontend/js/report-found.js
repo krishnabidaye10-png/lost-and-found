@@ -54,7 +54,7 @@ if (!contactInfo.trim()) {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/items",
+            "/api/items",
             {
                 method: "POST",
                 body: formData

@@ -11,7 +11,7 @@ async function loadItem() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/items/${itemId}`
+            `/api/items/${itemId}`
         );
 
         if (!response.ok) {
@@ -43,7 +43,7 @@ async function loadItem() {
         if (item.photo) {
 
             document.getElementById("itemImage").src =
-                `http://localhost:3000${item.photo}`;
+                item.photo;
         }
 
         // Status
@@ -125,7 +125,7 @@ async function markReturned() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/items/${itemId}/returned`,
+            `/api/items/${itemId}/returned`,
             {
                 method: "PUT"
             }
@@ -153,6 +153,7 @@ async function markReturned() {
     }
 }
 
+
 function editItem() {
 
     const params = new URLSearchParams(window.location.search);
@@ -165,6 +166,9 @@ function editItem() {
 
     window.location.href = `edit-item.html?id=${itemId}`;
 }
+
+
+// Delete item
 async function deleteItem() {
 
     const params = new URLSearchParams(window.location.search);
@@ -186,7 +190,7 @@ async function deleteItem() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/items/${itemId}`,
+            `/api/items/${itemId}`,
             {
                 method: "DELETE"
             }
@@ -211,4 +215,7 @@ async function deleteItem() {
 
         alert("Could not connect to the server.");
     }
-}loadItem();
+}
+
+
+loadItem();

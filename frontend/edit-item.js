@@ -13,7 +13,7 @@ async function loadItem() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/items/${itemId}`
+            `/api/items/${itemId}`
         );
 
         if (!response.ok) {
@@ -43,6 +43,7 @@ async function loadItem() {
         alert("Could not load item.");
     }
 }
+
 
 form.addEventListener("submit", async function(event) {
 
@@ -77,7 +78,7 @@ form.addEventListener("submit", async function(event) {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/items/${itemId}`,
+            `/api/items/${itemId}`,
             {
                 method: "PUT",
 
@@ -116,5 +117,6 @@ form.addEventListener("submit", async function(event) {
         alert("Could not connect to the server.");
     }
 });
+
 
 loadItem();
