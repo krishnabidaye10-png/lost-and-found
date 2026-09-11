@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
-    res.send("Lost & Found API is running!");
+    res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
 app.get("/api/items", (req, res) => {
