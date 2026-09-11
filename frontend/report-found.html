@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Found Item</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Report Found Item</h1>
+        <p>Tell us about the item you found.</p>
+    </header>
+
+    <main>
+
+        <form id="foundItemForm">
+
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+
+                <input
+                    type="text"
+                    id="itemName"
+                    name="itemName"
+                    placeholder="e.g. Set of Keys"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="photo">Photo</label>
+
+                <input
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    accept="image/*"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="location">Where was it found?</label>
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="e.g. Lobby, Parking Area"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="itemDate">Date</label>
+
+                <input
+                    type="date"
+                    id="itemDate"
+                    name="itemDate"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="contactName">Your Name</label>
+
+                <input
+                    type="text"
+                    id="contactName"
+                    name="contactName"
+                    placeholder="Enter your name"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="contactInfo">Contact Information</label>
+
+                <input
+                    type="text"
+                    id="contactInfo"
+                    name="contactInfo"
+                    placeholder="Email or phone number"
+                    required
+                >
+            </div>
+
+
+            <button type="submit" class="button">
+                Post Found Item
+            </button>
+
+        </form>
+
+        <p>
+            <a href="index.html">← Back to Home</a>
+        </p>
+
+    </main>
+
+    <script src="js/report-found.js"></script>
+
+</body>
+
+</html>

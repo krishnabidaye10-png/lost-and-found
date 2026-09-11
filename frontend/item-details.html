@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Item Details</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Item Details</h1>
+        <p>View information about this item.</p>
+    </header>
+
+
+    <main>
+
+        <div class="item-details">
+
+            <img
+                id="itemImage"
+                src="https://via.placeholder.com/500x300"
+                alt="Item"
+                class="detail-image"
+            >
+
+            <div class="item-info">
+
+                <h2 id="itemName">Loading...</h2>
+
+                <p>
+                    <strong>Location:</strong>
+                    <span id="itemLocation"></span>
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    <span id="itemDate"></span>
+                </p>
+
+                <p id="itemStatus" class="status"></p>
+
+                <hr>
+
+                <h3>Reported By</h3>
+
+                <p>
+                    <strong>Name:</strong>
+                    <span id="contactName"></span>
+                </p>
+
+                <p>
+                    <strong>Contact:</strong>
+                    <span id="contactInfo"></span>
+                </p>
+
+                <button
+                    class="button"
+                    onclick="contactPerson()"
+                >
+                    Contact / Claim
+                </button>
+                <button class="button edit-button" onclick="editItem()">Edit Item</button>
+                <button class="button delete-button" onclick="deleteItem()">Delete Item</button>
+                <button
+                    class="button returned-button"
+                    onclick="markReturned()"
+                >
+                    Mark as Returned
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <p>
+            <a href="items.html">← Back to Items</a>
+        </p>
+
+    </main>
+
+
+    <script src="js/item-details.js"></script>
+
+</body>
+
+</html>

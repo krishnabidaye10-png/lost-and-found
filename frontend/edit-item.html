@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Edit Item</h1>
+        <p>Update your lost or found item report.</p>
+    </header>
+
+    <main>
+
+        <form id="editItemForm">
+
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+                <input
+                    type="text"
+                    id="itemName"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input
+                    type="text"
+                    id="location"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="itemDate">Date</label>
+                <input
+                    type="date"
+                    id="itemDate"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="contactName">Your Name</label>
+                <input
+                    type="text"
+                    id="contactName"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="contactInfo">Contact Information</label>
+                <input
+                    type="text"
+                    id="contactInfo"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="button">
+                Save Changes
+            </button>
+
+        </form>
+
+        <p>
+            <a href="items.html">← Back to Items</a>
+        </p>
+
+    </main>
+
+    <script src="js/edit-item.js"></script>
+
+</body>
+</html>
