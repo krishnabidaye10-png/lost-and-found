@@ -65,14 +65,26 @@
                 >
                     Contact / Claim
                 </button>
-                <button class="button edit-button" onclick="editItem()">Edit Item</button>
-                <button class="button delete-button" onclick="deleteItem()">Delete Item</button>
                 <button
-                    class="button returned-button"
-                    onclick="markReturned()"
-                >
-                    Mark as Returned
-                </button>
+    class="button edit-button"
+    onclick="requireLogin(editItem)"
+>
+    Edit Item
+</button>
+
+<button
+    class="button delete-button"
+    onclick="requireLogin(deleteItem)"
+>
+    Delete Item
+</button>
+
+<button
+    class="button returned-button"
+    onclick="requireLogin(markReturned)"
+>
+    Mark as Returned
+</button>
 
             </div>
 

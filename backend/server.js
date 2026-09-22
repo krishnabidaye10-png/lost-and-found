@@ -1,8 +1,11 @@
+
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const db = require("./db");
 
 const app = express();
@@ -81,6 +84,377 @@ app.use(
 
 
 // ===============================
+// REGISTER
+// ===============================
+
+app.post("/api/auth/register", async (req, res) => {
+
+    try {
+
+        const {
+            name,
+            email,
+            password,
+            confirmPassword
+        } = req.body;
+
+
+        // Check required fields
+
+        if (
+            !name ||
+            !email ||
+            !password ||
+            !confirmPassword
+        ) {
+
+            return res.status(400).json({
+
+                message:
+                    "Please fill in all fields."
+
+            });
+
+        }
+
+
+        // Check password confirmation
+
+        if (password !== confirmPassword) {
+
+            return res.status(400).json({
+
+                message:
+                    "Passwords do not match."
+
+            });
+
+        }
+
+
+        // Password length
+
+        if (password.length < 6) {
+
+            return res.status(400).json({
+
+                message:
+                    "Password must be at least 6 characters."
+
+            });
+
+        }
+
+
+        // Normalize email
+
+        const normalizedEmail =
+            email.trim().toLowerCase();
+
+
+        // Check if email already exists
+
+        const checkSql =
+            "SELECT id FROM users WHERE email = ?";
+
+
+        db.query(
+            checkSql,
+            [normalizedEmail],
+            async (err, results) => {
+
+                if (err) {
+
+                    console.error(
+                        "Error checking email:",
+                        err
+                    );
+
+                    return res.status(500).json({
+
+                        message:
+                            "Registration failed."
+
+                    });
+
+                }
+
+
+                // Duplicate email
+
+                if (results.length > 0) {
+
+                    return res.status(409).json({
+
+                        message:
+                            "An account with this email already exists."
+
+                    });
+
+                }
+
+
+                // Hash password
+
+                const hashedPassword =
+                    await bcrypt.hash(
+                        password,
+                        12
+                    );
+
+
+                // Insert user
+
+                const insertSql = `
+
+                    INSERT INTO users
+                    (
+                        name,
+                        email,
+                        password
+                    )
+
+                    VALUES (?, ?, ?)
+
+                `;
+
+
+                db.query(
+                    insertSql,
+                    [
+                        name.trim(),
+                        normalizedEmail,
+                        hashedPassword
+                    ],
+                    (err, result) => {
+
+                        if (err) {
+
+                            console.error(
+                                "Error creating user:",
+                                err
+                            );
+
+                            return res.status(500).json({
+
+                                message:
+                                    "Registration failed."
+
+                            });
+
+                        }
+
+
+                        res.status(201).json({
+
+                            message:
+                                "Registration successful.",
+
+                            userId:
+                                result.insertId
+
+                        });
+
+                    }
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Registration error:",
+            error
+        );
+
+        res.status(500).json({
+
+            message:
+                "Something went wrong during registration."
+
+        });
+
+    }
+
+});
+
+
+// ===============================
+// LOGIN
+// ===============================
+
+app.post("/api/auth/login", (req, res) => {
+
+    const {
+        email,
+        password
+    } = req.body;
+
+
+    // Check required fields
+
+    if (!email || !password) {
+
+        return res.status(400).json({
+
+            message:
+                "Please enter your email and password."
+
+        });
+
+    }
+
+
+    // Normalize email
+
+    const normalizedEmail =
+        email.trim().toLowerCase();
+
+
+    // Find user
+
+    const sql = `
+
+        SELECT
+            id,
+            name,
+            email,
+            password
+
+        FROM users
+
+        WHERE email = ?
+
+    `;
+
+
+    db.query(
+        sql,
+        [normalizedEmail],
+        async (err, results) => {
+
+            if (err) {
+
+                console.error(
+                    "Error finding user:",
+                    err
+                );
+
+                return res.status(500).json({
+
+                    message:
+                        "Login failed."
+
+                });
+
+            }
+
+
+            // User doesn't exist
+
+            if (results.length === 0) {
+
+                return res.status(401).json({
+
+                    message:
+                        "Invalid email or password."
+
+                });
+
+            }
+
+
+            const user =
+                results[0];
+
+
+            // Compare password
+
+            const passwordMatches =
+                await bcrypt.compare(
+                    password,
+                    user.password
+                );
+
+
+            if (!passwordMatches) {
+
+                return res.status(401).json({
+
+                    message:
+                        "Invalid email or password."
+
+                });
+
+            }
+
+
+            // Check JWT secret
+
+            if (!process.env.JWT_SECRET) {
+
+                console.error(
+                    "JWT_SECRET is not configured."
+                );
+
+                return res.status(500).json({
+
+                    message:
+                        "Server authentication is not configured."
+
+                });
+
+            }
+
+
+            // Create JWT
+
+            const token =
+                jwt.sign(
+
+                    {
+                        id: user.id,
+                        email: user.email
+                    },
+
+                    process.env.JWT_SECRET,
+
+                    {
+                        expiresIn: "7d"
+                    }
+
+                );
+
+
+            // Send response
+
+            res.json({
+
+                message:
+                    "Login successful.",
+
+                token: token,
+
+                user: {
+
+                    id: user.id,
+
+                    name: user.name,
+
+                    email: user.email
+
+                }
+
+            });
+
+        }
+    );
+
+});
+
+
+// ===============================
 // HOME PAGE
 // ===============================
 
@@ -115,7 +489,10 @@ app.get("/api/items", (req, res) => {
             );
 
             return res.status(500).json({
-                message: "Failed to fetch items"
+
+                message:
+                    "Failed to fetch items"
+
             });
 
         }
@@ -133,7 +510,8 @@ app.get("/api/items", (req, res) => {
 
 app.get("/api/items/:id", (req, res) => {
 
-    const itemId = req.params.id;
+    const itemId =
+        req.params.id;
 
     const sql =
         "SELECT * FROM items WHERE id = ?";
@@ -151,7 +529,10 @@ app.get("/api/items/:id", (req, res) => {
                 );
 
                 return res.status(500).json({
-                    message: "Failed to fetch item"
+
+                    message:
+                        "Failed to fetch item"
+
                 });
 
             }
@@ -160,13 +541,18 @@ app.get("/api/items/:id", (req, res) => {
             if (results.length === 0) {
 
                 return res.status(404).json({
-                    message: "Item not found"
+
+                    message:
+                        "Item not found"
+
                 });
 
             }
 
 
-            res.json(results[0]);
+            res.json(
+                results[0]
+            );
 
         }
     );
@@ -601,10 +987,19 @@ app.use(
 // START SERVER
 // ===============================
 
-// Railway provides PORT automatically
+// Railway/Render provides PORT automatically
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log(
+            `Server running on port ${PORT}`
+        );
+
+    }
+);

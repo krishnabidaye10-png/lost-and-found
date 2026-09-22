@@ -49,8 +49,8 @@ function displayItems(items) {
 
 
         const imageUrl = item.photo
-            ? `http://localhost:3000${item.photo}`
-            : "https://via.placeholder.com/300x200";
+    ? item.photo
+    : "https://via.placeholder.com/300x200";
 
 
         card.innerHTML = `

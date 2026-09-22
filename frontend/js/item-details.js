@@ -156,15 +156,23 @@ async function markReturned() {
 
 function editItem() {
 
-    const params = new URLSearchParams(window.location.search);
-    const itemId = params.get("id");
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const itemId =
+        params.get("id");
+
+    console.log("Edit button clicked");
+    console.log("Item ID:", itemId);
 
     if (!itemId) {
+
         alert("Item ID not found.");
         return;
     }
 
-    window.location.href = `edit-item.html?id=${itemId}`;
+    window.location.href =
+        "edit-item.html?id=" + itemId;
 }
 
 
@@ -216,6 +224,36 @@ async function deleteItem() {
         alert("Could not connect to the server.");
     }
 }
+// ===============================
+// REQUIRE LOGIN
+// ===============================
 
+function requireLogin(action) {
+
+    const token =
+        localStorage.getItem("token");
+
+    if (token) {
+
+        // User is logged in
+        action();
+
+    } else {
+
+        // Remember this item page
+        const currentPage =
+            window.location.pathname +
+            window.location.search;
+
+        localStorage.setItem(
+            "redirectAfterLogin",
+            currentPage
+        );
+
+        // Send user to login
+        window.location.href =
+            "login.html";
+    }
+}
 
 loadItem();
