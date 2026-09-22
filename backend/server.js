@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const db = require("./db");
 
 const app = express();
-
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // ===============================
 // UPLOAD FOLDER
